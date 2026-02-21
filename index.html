@@ -31,14 +31,40 @@
 
   <!-- ===== HERO ===== -->
   <section class="hero" id="home">
+    <canvas class="hero-particles" id="heroCanvas"></canvas>
     <div class="hero-bg"></div>
     <div class="container hero-content">
-      <div class="hero-badge">CISSP Certified</div>
-      <h1 class="hero-name">Vishu Adapa</h1>
-      <p class="hero-tagline">Data Security &amp; Cyber Resiliency Expert</p>
-      <p class="hero-subtitle">Hybrid Cloud &nbsp;·&nbsp; Disaster Recovery &nbsp;·&nbsp; Business Continuity &nbsp;·&nbsp; AWS &nbsp;·&nbsp; Azure &nbsp;·&nbsp; GCP</p>
-      <p class="hero-location">&#128205; Dallas-Fort Worth Metroplex</p>
-      <div class="hero-actions">
+
+      <!-- CISSP Shield Badge -->
+      <div class="cissp-shield" title="Certified Information Systems Security Professional — ISC²">
+        <svg width="72" height="82" viewBox="0 0 72 82" xmlns="http://www.w3.org/2000/svg" aria-label="CISSP Certified">
+          <defs>
+            <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1e3a8a"/>
+              <stop offset="100%" stop-color="#0f172a"/>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <path d="M36 1 L70 15 L70 48 Q70 68 36 81 Q2 68 2 48 L2 15 Z" fill="url(#sg)" stroke="#3b82f6" stroke-width="1.5" filter="url(#glow)"/>
+          <path d="M36 9 L63 21 L63 47 Q63 63 36 74 Q9 63 9 47 L9 21 Z" fill="none" stroke="rgba(147,197,253,0.35)" stroke-width="1"/>
+          <text x="36" y="37" text-anchor="middle" fill="#93c5fd" font-family="Inter,Arial,sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.5">(ISC)²</text>
+          <text x="36" y="55" text-anchor="middle" fill="#ffffff" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800" letter-spacing="1.5">CISSP</text>
+        </svg>
+      </div>
+
+      <h1 class="hero-name hero-animate" style="--delay:.1s">Vishu Adapa</h1>
+
+      <p class="hero-tagline hero-animate" style="--delay:.25s">
+        <span id="typewriter"></span><span class="tw-cursor">|</span>
+      </p>
+
+      <p class="hero-subtitle hero-animate" style="--delay:.4s">Hybrid Cloud &nbsp;·&nbsp; Disaster Recovery &nbsp;·&nbsp; Business Continuity &nbsp;·&nbsp; AWS &nbsp;·&nbsp; Azure &nbsp;·&nbsp; GCP</p>
+      <p class="hero-location hero-animate" style="--delay:.5s">&#128205; Dallas-Fort Worth Metroplex</p>
+
+      <div class="hero-actions hero-animate" style="--delay:.65s">
         <a href="#experience" class="btn btn-primary">View Experience</a>
         <a href="#contact" class="btn btn-outline">Get in Touch</a>
       </div>
@@ -62,7 +88,7 @@
           <p>Collaborating closely with cross-functional teams, I design and manage disaster recovery and business continuity strategies that align with corporate objectives. I've guided organizations across Energy, Financial, Healthcare, and Retail sectors through complex cloud migrations, underpinned by deep expertise in data protection and security best practices.</p>
           <div class="about-stats">
             <div class="stat">
-              <span class="stat-number">20+</span>
+              <span class="stat-number" data-count="20" data-suffix="+">0</span>
               <span class="stat-label">Years Experience</span>
             </div>
             <div class="stat">
@@ -70,11 +96,11 @@
               <span class="stat-label">Certified</span>
             </div>
             <div class="stat">
-              <span class="stat-number">3</span>
+              <span class="stat-number" data-count="3">0</span>
               <span class="stat-label">Cloud Platforms</span>
             </div>
             <div class="stat">
-              <span class="stat-number">4</span>
+              <span class="stat-number" data-count="4">0</span>
               <span class="stat-label">Languages</span>
             </div>
           </div>

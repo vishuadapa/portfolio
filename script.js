@@ -2,7 +2,7 @@
 //  VISHU ADAPA PORTFOLIO — script.js
 // ============================================================
 
-// --- Navbar: add .scrolled class after scrolling 50px ---
+// --- Navbar scroll ---
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 50);
@@ -11,17 +11,12 @@ window.addEventListener('scroll', () => {
 // --- Mobile nav toggle ---
 const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(link =>
+  link.addEventListener('click', () => navLinks.classList.remove('open'))
+);
 
-navToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-});
-
-// Close mobile nav when a link is clicked
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => navLinks.classList.remove('open'));
-});
-
-// --- Smooth scroll (accounts for fixed navbar height) ---
+// --- Smooth scroll ---
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     const href = this.getAttribute('href');
@@ -29,22 +24,157 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(href);
     if (!target) return;
     e.preventDefault();
-    const top = target.getBoundingClientRect().top + window.scrollY - 68;
-    window.scrollTo({ top, behavior: 'smooth' });
+    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 68, behavior: 'smooth' });
   });
 });
 
 // --- Intersection Observer: fade-in on scroll ---
 const io = new IntersectionObserver(
-  (entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
-    });
-  },
+  entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }),
   { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
 );
-
 document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+// ============================================================
+//  PARTICLE CANVAS — hero background
+// ============================================================
+(function () {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const COUNT = 55;
+  const CONNECT_DIST = 140;
+  let W, H, particles;
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function Particle() {
+    this.x  = Math.random() * W;
+    this.y  = Math.random() * H;
+    this.vx = (Math.random() - .5) * .45;
+    this.vy = (Math.random() - .5) * .45;
+    this.r  = Math.random() * 1.8 + .8;
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: COUNT }, () => new Particle());
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // Move & bounce
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(147,197,253,0.55)';
+      ctx.fill();
+    });
+    // Connect nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < CONNECT_DIST) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(59,130,246,${(1 - d / CONNECT_DIST) * 0.25})`;
+          ctx.lineWidth = .8;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  init();
+  draw();
+  window.addEventListener('resize', init, { passive: true });
+})();
+
+// ============================================================
+//  TYPEWRITER — cycles through roles in the hero tagline
+// ============================================================
+(function () {
+  const el = document.getElementById('typewriter');
+  if (!el) return;
+
+  const phrases = [
+    'Data Security & Cyber Resiliency Expert',
+    'Hybrid Cloud Architect',
+    'Senior Sales Engineer @ Cohesity',
+    'Disaster Recovery Specialist',
+    'Business Continuity Strategist',
+  ];
+
+  let pi = 0, ci = 0, deleting = false;
+  const TYPE_SPEED   = 55;
+  const DELETE_SPEED = 28;
+  const PAUSE        = 2200;
+
+  function tick() {
+    const current = phrases[pi];
+    if (deleting) {
+      el.textContent = current.slice(0, --ci);
+      if (ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+        setTimeout(tick, 400);
+        return;
+      }
+      setTimeout(tick, DELETE_SPEED);
+    } else {
+      el.textContent = current.slice(0, ++ci);
+      if (ci === current.length) {
+        deleting = true;
+        setTimeout(tick, PAUSE);
+        return;
+      }
+      setTimeout(tick, TYPE_SPEED);
+    }
+  }
+
+  setTimeout(tick, 900);
+})();
+
+// ============================================================
+//  ANIMATED COUNTERS — stats in the About section
+// ============================================================
+(function () {
+  const counters = document.querySelectorAll('.stat-number[data-count]');
+  if (!counters.length) return;
+
+  const counterIO = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el     = entry.target;
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      const dur    = 1400;
+      const step   = 16;
+      const steps  = Math.ceil(dur / step);
+      let current  = 0;
+
+      const timer = setInterval(() => {
+        current++;
+        el.textContent = Math.round((current / steps) * target) + suffix;
+        if (current >= steps) {
+          el.textContent = target + suffix;
+          clearInterval(timer);
+        }
+      }, step);
+
+      counterIO.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(el => counterIO.observe(el));
+})();

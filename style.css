@@ -123,9 +123,18 @@ body {
   overflow: hidden;
   padding: 100px 0 80px;
 }
+/* Particle canvas sits behind everything */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
 .hero-bg {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background-image:
     radial-gradient(circle at 20% 55%, rgba(37,99,235,.18) 0%, transparent 50%),
     radial-gradient(circle at 75% 20%, rgba(59,130,246,.12) 0%, transparent 40%),
@@ -133,21 +142,46 @@ body {
 }
 .hero-content {
   position: relative;
+  z-index: 2;
   text-align: center;
   color: var(--white);
 }
-.hero-badge {
+
+/* CISSP Shield */
+.cissp-shield {
   display: inline-block;
-  background: rgba(37,99,235,.25);
-  border: 1px solid rgba(59,130,246,.4);
+  margin-bottom: 20px;
+  animation: shieldFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(59,130,246,.5));
+  cursor: default;
+}
+@keyframes shieldFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Hero staggered entrance */
+.hero-animate {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: heroFadeUp .7s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes heroFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typewriter cursor */
+.tw-cursor {
+  display: inline-block;
   color: #93c5fd;
-  font-size: .75rem;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 6px 18px;
-  border-radius: 100px;
-  margin-bottom: 28px;
+  font-weight: 300;
+  animation: blink .75s step-end infinite;
+  margin-left: 2px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 .hero-name {
   font-size: clamp(2.5rem, 6vw, 4.5rem);
