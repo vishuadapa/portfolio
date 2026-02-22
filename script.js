@@ -2,6 +2,23 @@
 //  VISHU ADAPA PORTFOLIO — script.js
 // ============================================================
 
+// --- Dark mode ---
+const darkToggle = document.getElementById('darkToggle');
+const htmlEl = document.documentElement;
+
+function applyTheme(theme) {
+  htmlEl.setAttribute('data-theme', theme);
+  darkToggle.textContent = theme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  localStorage.setItem('theme', theme);
+}
+
+// Sync button label to the theme already set by the inline head script
+applyTheme(htmlEl.getAttribute('data-theme') || 'light');
+
+darkToggle.addEventListener('click', () => {
+  applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
 // --- Navbar scroll ---
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
@@ -28,6 +45,20 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
+// --- Active nav section highlighting ---
+const sections   = document.querySelectorAll('section[id]');
+const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navAnchors.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+      });
+    }
+  });
+}, { threshold: 0.25, rootMargin: '-64px 0px -40% 0px' });
+sections.forEach(s => sectionObserver.observe(s));
+
 // --- Intersection Observer: fade-in on scroll ---
 const io = new IntersectionObserver(
   entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }),
@@ -35,16 +66,30 @@ const io = new IntersectionObserver(
 );
 document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
 
+// --- Back to top ---
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
 // ============================================================
 //  PARTICLE CANVAS — hero background
 // ============================================================
 (function () {
   const canvas = document.getElementById('heroCanvas');
   if (!canvas) return;
+
+  // Respect reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.style.display = 'none';
+    return;
+  }
+
   const ctx = canvas.getContext('2d');
   const COUNT = 55;
   const CONNECT_DIST = 140;
-  let W, H, particles;
+  let W, H, particles, animId;
 
   function resize() {
     W = canvas.width  = canvas.offsetWidth;
@@ -92,12 +137,21 @@ document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
         }
       }
     }
-    requestAnimationFrame(draw);
+    animId = requestAnimationFrame(draw);
   }
 
   init();
   draw();
   window.addEventListener('resize', init, { passive: true });
+
+  // Pause animation when tab is not visible (saves CPU)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animId);
+    } else {
+      draw();
+    }
+  });
 })();
 
 // ============================================================
@@ -114,6 +168,12 @@ document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
     'Disaster Recovery Specialist',
     'Business Continuity Strategist',
   ];
+
+  // Static display if reduced motion preferred
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = phrases[0];
+    return;
+  }
 
   let pi = 0, ci = 0, deleting = false;
   const TYPE_SPEED   = 55;

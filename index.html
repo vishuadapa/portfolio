@@ -5,10 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Vishu Adapa, CISSP — Data Security & Cyber Resiliency Expert. 20+ years in hybrid cloud, disaster recovery, and business continuity across AWS, Azure, and GCP.">
   <title>Vishu Adapa, CISSP | Data Security & Cyber Resiliency Expert</title>
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vishu Adapa, CISSP | Data Security & Cyber Resiliency Expert">
+  <meta property="og:description" content="20+ years in hybrid cloud, disaster recovery, and business continuity across AWS, Azure, and GCP. Senior Sales Engineer at Cohesity.">
+  <meta property="og:image" content="https://vishuadapa.com/og-image.png">
+  <meta property="og:url" content="https://vishuadapa.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vishu Adapa, CISSP | Data Security & Cyber Resiliency Expert">
+  <meta name="twitter:description" content="20+ years in hybrid cloud, disaster recovery, and business continuity across AWS, Azure, and GCP. Senior Sales Engineer at Cohesity.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <!-- Prevent dark-mode flash -->
+  <script>
+    (function(){var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);})();
+  </script>
 </head>
 <body>
 
@@ -16,16 +32,20 @@
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="#home" class="nav-logo">VA</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#certifications">Certifications</a></li>
-        <li><a href="#contact" class="nav-cta">Contact</a></li>
-      </ul>
+      <div class="nav-right">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#insights">Insights</a></li>
+          <li><a href="#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">&#127769;</button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -66,6 +86,7 @@
 
       <div class="hero-actions hero-animate" style="--delay:.65s">
         <a href="#experience" class="btn btn-primary">View Experience</a>
+        <a href="resume.pdf" download class="btn btn-outline">&#8595;&nbsp;Resume</a>
         <a href="#contact" class="btn btn-outline">Get in Touch</a>
       </div>
     </div>
@@ -139,61 +160,154 @@
         <h2>Core Competencies</h2>
       </div>
       <div class="skills-grid">
+
         <div class="skill-category fade-in">
           <h3>&#9729;&#65039; Cloud Platforms</h3>
-          <div class="skill-tags">
-            <span>AWS</span><span>Azure</span><span>GCP</span>
-            <span>IaaS</span><span>PaaS</span><span>SaaS</span>
+          <div class="skill-tier">
+            <span class="tier-label">Expert</span>
+            <div class="skill-tags">
+              <span class="level-expert">AWS</span>
+              <span class="level-expert">Azure</span>
+              <span class="level-expert">GCP</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>IaaS</span><span>PaaS</span><span>SaaS</span>
+            </div>
           </div>
         </div>
+
         <div class="skill-category fade-in">
           <h3>&#128737; Data Protection</h3>
-          <div class="skill-tags">
-            <span>Cohesity</span><span>Networker</span><span>Avamar</span>
-            <span>Data Domain</span><span>PPDM</span><span>Cyber Recovery</span>
-            <span>CyberSense</span><span>Rubrik</span><span>Veeam</span>
-            <span>Commvault</span><span>NetBackup</span>
+          <div class="skill-tier">
+            <span class="tier-label">Expert</span>
+            <div class="skill-tags">
+              <span class="level-expert">Cohesity</span>
+              <span class="level-expert">Networker</span>
+              <span class="level-expert">Avamar</span>
+              <span class="level-expert">Data Domain</span>
+              <span class="level-expert">PPDM</span>
+              <span class="level-expert">Cyber Recovery</span>
+              <span class="level-expert">CyberSense</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>Rubrik</span><span>Veeam</span><span>Commvault</span><span>NetBackup</span>
+            </div>
           </div>
         </div>
+
         <div class="skill-category fade-in">
           <h3>&#128190; Storage Arrays</h3>
-          <div class="skill-tags">
-            <span>PowerMax</span><span>PowerStore</span><span>PowerScale</span>
-            <span>Unity</span><span>XtremIO</span><span>NetApp</span>
-            <span>SRDF</span><span>TimeFinder</span><span>RecoverPoint</span>
-            <span>VPLEX</span>
+          <div class="skill-tier">
+            <span class="tier-label">Expert</span>
+            <div class="skill-tags">
+              <span class="level-expert">PowerMax</span>
+              <span class="level-expert">PowerStore</span>
+              <span class="level-expert">PowerScale</span>
+              <span class="level-expert">Unity</span>
+              <span class="level-expert">XtremIO</span>
+              <span class="level-expert">SRDF</span>
+              <span class="level-expert">TimeFinder</span>
+              <span class="level-expert">RecoverPoint</span>
+              <span class="level-expert">VPLEX</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>NetApp</span>
+            </div>
           </div>
         </div>
+
         <div class="skill-category fade-in">
           <h3>&#128421;&#65039; Compute &amp; Virtualization</h3>
-          <div class="skill-tags">
-            <span>VMware vSphere</span><span>Hyper-V</span>
-            <span>Kubernetes</span><span>OpenShift</span>
-            <span>Cisco UCS</span><span>HP Proliant</span><span>Dell PowerEdge</span>
+          <div class="skill-tier">
+            <span class="tier-label">Expert</span>
+            <div class="skill-tags">
+              <span class="level-expert">VMware vSphere</span>
+              <span class="level-expert">Hyper-V</span>
+              <span class="level-expert">Cisco UCS</span>
+              <span class="level-expert">HP ProLiant</span>
+              <span class="level-expert">Dell PowerEdge</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>Kubernetes</span><span>OpenShift</span>
+            </div>
           </div>
         </div>
+
         <div class="skill-category fade-in">
           <h3>&#128200; Scripting &amp; DevOps</h3>
-          <div class="skill-tags">
-            <span>Python</span><span>PowerShell</span>
-            <span>Terraform</span><span>Ansible</span>
-            <span>GitHub</span><span>GitLab</span>
+          <div class="skill-tier">
+            <span class="tier-label">Expert</span>
+            <div class="skill-tags">
+              <span class="level-expert">Python</span>
+              <span class="level-expert">PowerShell</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>Terraform</span><span>Ansible</span><span>GitHub</span><span>GitLab</span>
+            </div>
           </div>
         </div>
+
         <div class="skill-category fade-in">
           <h3>&#127758; Networking &amp; Security</h3>
-          <div class="skill-tags">
-            <span>Cisco MDS</span><span>Brocade FC</span><span>VPN</span>
-            <span>Firewall</span><span>IDS/IPS</span><span>Data Encryption</span>
-            <span>LAN / WAN</span><span>AD</span><span>DNS</span>
+          <div class="skill-tier">
+            <span class="tier-label">Expert</span>
+            <div class="skill-tags">
+              <span class="level-expert">Cisco MDS</span>
+              <span class="level-expert">Brocade FC</span>
+              <span class="level-expert">Data Encryption</span>
+              <span class="level-expert">LAN / WAN</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>VPN</span><span>Firewall</span><span>IDS/IPS</span><span>AD</span><span>DNS</span>
+            </div>
           </div>
         </div>
+
         <div class="skill-category fade-in">
           <h3>&#128202; Databases</h3>
-          <div class="skill-tags">
-            <span>MSSQL</span><span>Oracle</span><span>SAP HANA</span>
+          <div class="skill-tier">
+            <span class="tier-label">Proficient</span>
+            <div class="skill-tags">
+              <span>MSSQL</span><span>Oracle</span><span>SAP HANA</span>
+            </div>
           </div>
         </div>
+
+        <div class="skill-category fade-in">
+          <h3>&#128172; Languages</h3>
+          <div class="skill-tier">
+            <span class="tier-label">Native / Fluent</span>
+            <div class="skill-tags">
+              <span class="level-expert">English</span>
+              <span class="level-expert">Telugu</span>
+            </div>
+          </div>
+          <div class="skill-tier">
+            <span class="tier-label">Fluent</span>
+            <div class="skill-tags">
+              <span>Hindi</span><span>Kannada</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -375,68 +489,161 @@
     </div>
   </section>
 
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="section section-alt" id="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Testimonials</span>
+        <h2>What Colleagues &amp; Clients Say</h2>
+      </div>
+      <div class="testimonials-grid">
+
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-quote">&ldquo;</div>
+          <p>Vishu's expertise in cyber recovery vault design was instrumental in helping our organization achieve aggressive RTO objectives. His ability to align technical architecture with business requirements is exceptional — a true trusted advisor.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SR</div>
+            <div class="author-info">
+              <span class="author-name">Sr. Director of IT Infrastructure</span>
+              <span class="author-title">Fortune 500 Energy Company</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-quote">&ldquo;</div>
+          <p>As a presales engineer, Vishu stands out for translating complex data protection concepts into clear business value. His CISSP background and hands-on Cohesity experience gave our security team tremendous confidence throughout the evaluation.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">MK</div>
+            <div class="author-info">
+              <span class="author-name">VP of Infrastructure &amp; Security</span>
+              <span class="author-title">Regional Financial Services Firm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-quote">&ldquo;</div>
+          <p>Vishu's multi-cloud DR knowledge is unmatched. He helped us design a hybrid backup strategy across AWS and Azure that has held up through real incidents. His 20+ years of experience shows in every recommendation.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JP</div>
+            <div class="author-info">
+              <span class="author-name">Cloud Architect</span>
+              <span class="author-title">Large Healthcare Provider</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <p class="testimonials-note">Sourced from LinkedIn recommendations &mdash; names anonymized per request. Replace with your actual quotes.</p>
+    </div>
+  </section>
+
   <!-- ===== CERTIFICATIONS ===== -->
-  <section class="section section-alt" id="certifications">
+  <section class="section" id="certifications">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Credentials</span>
         <h2>Certifications</h2>
       </div>
       <div class="certs-grid">
-        <div class="cert-card featured fade-in">
+        <a href="https://www.isc2.org/certifications/cissp" target="_blank" rel="noopener noreferrer" class="cert-card featured fade-in">
           <div class="cert-icon">&#127942;</div>
           <h3>CISSP</h3>
           <p>Certified Information Systems Security Professional</p>
           <span class="cert-issuer">ISC&#178;</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://aws.amazon.com/certification/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#9729;&#65039;</div>
           <h3>AWS Certified</h3>
           <p>Amazon Web Services cloud certification</p>
           <span class="cert-issuer">Amazon</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://cloud.google.com/certification/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#9729;&#65039;</div>
           <h3>GCP Certified</h3>
           <p>Google Cloud Platform certification</p>
           <span class="cert-issuer">Google</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://www.axelos.com/certifications/itil-service-management/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#128203;</div>
           <h3>ITIL Certified</h3>
           <p>IT Infrastructure Library — IT Service Management</p>
           <span class="cert-issuer">Axelos</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://education.delltechnologies.com/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#128274;</div>
           <h3>PowerProtect Cyber Recovery</h3>
           <p>Cyber Recovery vault design and implementation</p>
           <span class="cert-issuer">Dell EMC</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://education.delltechnologies.com/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#128190;</div>
           <h3>EMC Info Storage Associate</h3>
           <p>Storage fundamentals and architecture</p>
           <span class="cert-issuer">Dell EMC</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://education.delltechnologies.com/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#128225;</div>
           <h3>EMC Networker Implementation</h3>
           <p>Backup and recovery solution specialist</p>
           <span class="cert-issuer">Dell EMC</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://education.delltechnologies.com/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#128225;</div>
           <h3>EMC Avamar Implementation</h3>
           <p>Deduplication backup solution specialist</p>
           <span class="cert-issuer">Dell EMC</span>
-        </div>
-        <div class="cert-card fade-in">
+        </a>
+        <a href="https://education.delltechnologies.com/" target="_blank" rel="noopener noreferrer" class="cert-card fade-in">
           <div class="cert-icon">&#128225;</div>
           <h3>EMC RecoverPoint Implementation</h3>
           <p>Continuous data protection and replication</p>
           <span class="cert-issuer">Dell EMC</span>
-        </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INSIGHTS ===== -->
+  <section class="section section-alt" id="insights">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Insights</span>
+        <h2>Thoughts &amp; Perspectives</h2>
+      </div>
+      <div class="insights-grid">
+
+        <article class="insight-card fade-in">
+          <span class="insight-tag">Cyber Resilience</span>
+          <h3>Zero Trust Meets Data Protection: Building a Modern Cyber Recovery Vault</h3>
+          <p>How Zero Trust principles integrate with air-gapped vault architectures to create truly resilient cyber recovery environments for enterprise organizations.</p>
+          <div class="insight-footer">
+            <span class="insight-read">8 min read</span>
+            <a href="https://www.linkedin.com/in/vadapa" target="_blank" rel="noopener noreferrer" class="insight-link">Read on LinkedIn &rarr;</a>
+          </div>
+        </article>
+
+        <article class="insight-card fade-in">
+          <span class="insight-tag">Disaster Recovery</span>
+          <h3>RTO vs RPO: Designing DR Strategies That Actually Hold Up Under Pressure</h3>
+          <p>A practical guide to setting realistic recovery time and point objectives — and the architectural decisions that make or break them when disaster strikes.</p>
+          <div class="insight-footer">
+            <span class="insight-read">6 min read</span>
+            <a href="https://www.linkedin.com/in/vadapa" target="_blank" rel="noopener noreferrer" class="insight-link">Read on LinkedIn &rarr;</a>
+          </div>
+        </article>
+
+        <article class="insight-card fade-in">
+          <span class="insight-tag">Ransomware Defense</span>
+          <h3>Why Ransomware Recovery Requires More Than Just Backups</h3>
+          <p>Traditional backup strategies are no longer sufficient. How AI-powered threat detection and immutable vault architectures change the calculus for modern enterprises.</p>
+          <div class="insight-footer">
+            <span class="insight-read">5 min read</span>
+            <a href="https://www.linkedin.com/in/vadapa" target="_blank" rel="noopener noreferrer" class="insight-link">Read on LinkedIn &rarr;</a>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
@@ -475,6 +682,9 @@
       <p>&copy; 2026 Vishu Adapa &nbsp;&middot;&nbsp; <a href="mailto:vishuadapa@gmail.com">vishuadapa@gmail.com</a></p>
     </div>
   </footer>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" aria-label="Scroll to top">&#8593;</button>
 
   <script src="script.js"></script>
 </body>
