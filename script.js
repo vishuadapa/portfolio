@@ -162,11 +162,11 @@ backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 's
   if (!el) return;
 
   const phrases = [
-    'Data Security & Cyber Resiliency Expert',
-    'Hybrid Cloud Architect',
-    'Senior Sales Engineer @ Cohesity',
-    'Disaster Recovery Specialist',
-    'Business Continuity Strategist',
+    'Cyber Resilience Expert',
+    'Senior Systems Engineer @ Cohesity',
+    'Hybrid Cloud Architect — AWS · Azure · GCP',
+    'Enterprise AI Builder',
+    'Data Protection Specialist',
   ];
 
   // Static display if reduced motion preferred
