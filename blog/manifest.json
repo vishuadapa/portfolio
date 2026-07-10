@@ -1,0 +1,29 @@
+[
+  {
+    "slug": "ransomware-beyond-backups",
+    "title": "Why Ransomware Recovery Requires More Than Just Backups",
+    "date": "2026-07-09",
+    "tags": ["Ransomware Defense", "Cyber Resilience", "Data Protection"],
+    "description": "Traditional backup strategies are no longer sufficient. How AI-powered threat detection and immutable vault architectures change the calculus for modern enterprises.",
+    "readTime": "9 min read",
+    "image": ""
+  },
+  {
+    "slug": "rto-vs-rpo-dr-design",
+    "title": "RTO vs RPO: Designing DR Strategies That Actually Hold Up Under Pressure",
+    "date": "2026-07-02",
+    "tags": ["Disaster Recovery", "Business Continuity", "Architecture"],
+    "description": "A practical guide to setting realistic recovery time and point objectives — and the architectural decisions that make or break them when disaster strikes.",
+    "readTime": "7 min read",
+    "image": ""
+  },
+  {
+    "slug": "zero-trust-cyber-recovery-vault",
+    "title": "Zero Trust Meets Data Protection: Building a Modern Cyber Recovery Vault",
+    "date": "2026-06-25",
+    "tags": ["Cyber Resilience", "Zero Trust", "Data Protection"],
+    "description": "How Zero Trust principles integrate with air-gapped vault architectures to create truly resilient cyber recovery environments for enterprise organizations.",
+    "readTime": "8 min read",
+    "image": ""
+  }
+]

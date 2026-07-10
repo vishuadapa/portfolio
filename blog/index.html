@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional blog by Vishu Adapa, CISSP — insights on cyber resilience, data protection, disaster recovery, and enterprise cloud architecture.">
+  <title>Blog | Vishu Adapa, CISSP</title>
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Blog | Vishu Adapa, CISSP">
+  <meta property="og:description" content="Insights on cyber resilience, data protection, disaster recovery, and enterprise cloud from 20+ years in the field.">
+  <meta property="og:image" content="https://vishuadapa.com/og-image.png">
+  <meta property="og:url" content="https://vishuadapa.com/blog/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../style.css">
+
+  <link rel="stylesheet" id="hljs-light" href="lib/hljs-light.css">
+  <link rel="stylesheet" id="hljs-dark" href="lib/hljs-dark.css" disabled>
+
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+      document.documentElement.setAttribute('data-theme',t);
+      if(t==='dark'){
+        document.addEventListener('DOMContentLoaded',function(){
+          var l=document.getElementById('hljs-light');
+          var d=document.getElementById('hljs-dark');
+          if(l)l.disabled=true;
+          if(d)d.disabled=false;
+        });
+      }
+    })();
+  </script>
+
+  <style>
+    /* ── Blog-specific extensions to style.css ── */
+
+    .blog-nav-active {
+      color: var(--blue-light) !important;
+      position: relative;
+    }
+
+    /* Disclaimer banner */
+    .disclaimer-banner {
+      background: rgba(37,99,235,.07);
+      border-bottom: 1px solid rgba(37,99,235,.15);
+      padding: 11px 0;
+      position: sticky;
+      top: 64px;
+      z-index: 90;
+    }
+    [data-theme="dark"] .disclaimer-banner {
+      background: rgba(37,99,235,.1);
+      border-bottom-color: rgba(59,130,246,.2);
+    }
+    .disclaimer-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .disclaimer-icon { font-size: 1rem; flex-shrink: 0; padding-top: 2px; }
+    .disclaimer-inner p {
+      flex: 1;
+      font-size: .8rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+    .disclaimer-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-faint);
+      font-size: .85rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      transition: color .2s;
+      line-height: 1;
+    }
+    .disclaimer-close:hover { color: var(--text-body); }
+
+    /* Blog main */
+    .blog-main {
+      min-height: calc(100vh - 200px);
+    }
+
+    /* Listing view */
+    .listing-view { padding-top: 64px; }
+    .blog-page-header { margin-bottom: 48px; }
+    .blog-intro {
+      font-size: .95rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+    }
+
+    /* Tag filter */
+    .tag-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
+    .tag-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: .78rem;
+      font-weight: 500;
+      font-family: var(--font);
+      padding: 6px 16px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .tag-btn:hover, .tag-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    /* Post card grid */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+    .post-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow .2s, transform .2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .post-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .post-card-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+    .post-card-tag { margin-bottom: 10px; }
+    .post-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .post-card:hover .post-card-title { color: var(--blue); }
+    .post-card-desc {
+      font-size: .84rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 14px;
+    }
+    .post-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--divider);
+      font-size: .75rem;
+      color: var(--text-faint);
+    }
+    .post-card-footer .insight-link {
+      margin-left: auto;
+      font-size: .78rem;
+    }
+    [data-theme="dark"] .post-card { background: var(--card-bg); border-color: var(--card-border); }
+
+    /* Empty / loading state */
+    .listing-state {
+      text-align: center;
+      padding: 80px 24px;
+      color: var(--text-faint);
+      font-size: .95rem;
+    }
+
+    /* ── Post view ── */
+    .post-view { padding-top: 40px; padding-bottom: 80px; }
+    .post-container { max-width: 740px; }
+
+    /* Reading progress */
+    .reading-progress {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      z-index: 89;
+      pointer-events: none;
+    }
+    .reading-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--blue);
+      transition: width .08s linear;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb { margin-bottom: 28px; }
+    .breadcrumb-back {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--blue);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .breadcrumb-back:hover { color: var(--blue-light); }
+
+    /* Post header */
+    .post-header { margin-bottom: 36px; }
+    .post-title {
+      font-size: clamp(1.55rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text-heading);
+      letter-spacing: -.4px;
+      line-height: 1.25;
+      margin: 12px 0 14px;
+    }
+    .post-meta {
+      font-size: .82rem;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .meta-sep { color: var(--text-faint); }
+
+    /* Post hero image */
+    .post-hero-image {
+      margin-bottom: 32px;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .post-hero-image img {
+      width: 100%;
+      max-height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Prose (rendered Markdown) ── */
+    .post-content { line-height: 1.82; color: var(--text-body); font-size: .95rem; }
+    .post-content > *:first-child { margin-top: 0 !important; }
+
+    .post-content h1,
+    .post-content h2,
+    .post-content h3,
+    .post-content h4 {
+      color: var(--text-heading);
+      font-weight: 700;
+      line-height: 1.3;
+      margin: 2.2em 0 .75em;
+    }
+    .post-content h1 { font-size: 1.7rem; letter-spacing: -.4px; }
+    .post-content h2 {
+      font-size: 1.3rem;
+      letter-spacing: -.3px;
+      border-bottom: 1px solid var(--divider);
+      padding-bottom: .45em;
+    }
+    .post-content h3 { font-size: 1.05rem; }
+    .post-content h4 { font-size: .95rem; }
+
+    .post-content p { margin-bottom: 1.4em; }
+    .post-content a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+    .post-content a:hover { color: var(--blue-light); }
+    .post-content strong { font-weight: 600; color: var(--text-heading); }
+    .post-content em { font-style: italic; }
+
+    .post-content ul,
+    .post-content ol { padding-left: 1.6em; margin-bottom: 1.4em; }
+    .post-content li { margin-bottom: .45em; }
+    .post-content li > p { margin-bottom: .4em; }
+
+    .post-content blockquote {
+      border-left: 3px solid var(--blue);
+      padding: 12px 20px;
+      margin: 1.6em 0;
+      background: var(--bg-alt);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: var(--text-muted);
+    }
+    .post-content blockquote p { margin-bottom: 0; }
+
+    /* Code */
+    .post-content code {
+      background: var(--bg-alt);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: .84em;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+    }
+    .post-content pre {
+      background: var(--bg-alt) !important;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      position: relative;
+      margin: 1.6em 0;
+    }
+    .post-content pre code {
+      display: block;
+      padding: 18px 20px;
+      font-size: .84rem;
+      line-height: 1.65;
+      background: none !important;
+      border: none;
+      padding-right: 52px;
+    }
+
+    /* Copy button */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: .7rem;
+      font-weight: 500;
+      font-family: var(--font);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s, background .15s, color .15s;
+      z-index: 2;
+    }
+    .post-content pre:hover .copy-btn { opacity: 1; }
+    .copy-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* Tables */
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.6em 0;
+      font-size: .88rem;
+      overflow-x: auto;
+      display: block;
+    }
+    .post-content th {
+      background: var(--bg-alt);
+      color: var(--text-heading);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--divider);
+      white-space: nowrap;
+    }
+    .post-content td { padding: 10px 14px; border-bottom: 1px solid var(--divider); }
+    .post-content tr:last-child td { border-bottom: none; }
+
+    /* HR */
+    .post-content hr { border: none; border-top: 1px solid var(--divider); margin: 2.4em 0; }
+
+    /* Images */
+    .post-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      display: block;
+      margin: 0 auto;
+    }
+    .post-content figure { margin: 1.8em 0; }
+    .post-content figcaption {
+      text-align: center;
+      font-size: .78rem;
+      color: var(--text-faint);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* Mermaid */
+    .mermaid-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px 16px;
+      margin: 1.6em 0;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .mermaid-wrapper svg { max-width: 100%; height: auto; }
+
+    /* Post footer */
+    .post-footer { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--divider); }
+
+    /* Prev/Next nav */
+    .post-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .post-nav-link {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      text-decoration: none;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .post-nav-link:hover { box-shadow: var(--shadow-md); border-color: var(--blue); }
+    .post-nav-next { text-align: right; }
+    .nav-direction {
+      font-size: .7rem;
+      color: var(--text-faint);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .nav-title {
+      font-size: .83rem;
+      color: var(--text-heading);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* Share */
+    .post-share {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .share-label { font-size: .8rem; color: var(--text-faint); }
+    .share-btn {
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--blue);
+      text-decoration: none;
+      padding: 5px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      transition: all .2s;
+    }
+    .share-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    .btn-back {
+      display: inline-block;
+      padding: 9px 20px;
+      border-radius: 8px;
+      background: none;
+      border: 1.5px solid var(--card-border);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .875rem;
+      font-weight: 500;
+      transition: all .2s;
+    }
+    .btn-back:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .posts-grid { grid-template-columns: 1fr; }
+      .post-nav { grid-template-columns: 1fr; }
+      .post-nav-next { text-align: left; }
+      .listing-view { padding-top: 48px; }
+    }
+    @media (max-width: 480px) {
+      .post-container { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">VA</a>
+      <div class="nav-right">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#skills">Skills</a></li>
+          <li><a href="/#experience">Experience</a></li>
+          <li><a href="/#certifications">Certifications</a></li>
+          <li><a href="/#volunteering">Volunteering</a></li>
+          <li><a href="/blog/" class="blog-nav-active">Blog</a></li>
+          <li><a href="/#contact" class="nav-cta">Contact</a></li>
+        </ul>
+        <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">&#127769;</button>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== DISCLAIMER BANNER ===== -->
+  <div class="disclaimer-banner" id="disclaimerBanner" role="note">
+    <div class="container disclaimer-inner">
+      <span class="disclaimer-icon">&#8505;&#65039;</span>
+      <p>All opinions expressed here are personal and do not represent the views of any current or previous employer. No confidential or proprietary information is shared.</p>
+      <button class="disclaimer-close" id="disclaimerClose" aria-label="Dismiss disclaimer">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- ===== READING PROGRESS (post view only) ===== -->
+  <div class="reading-progress" id="readingProgress" style="display:none">
+    <div class="reading-progress-bar" id="readingProgressBar"></div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="blog-main" id="blogMain">
+
+    <!-- LISTING VIEW -->
+    <div id="listingView" class="listing-view section">
+      <div class="container">
+        <div class="section-header blog-page-header">
+          <span class="section-tag">Blog</span>
+          <h1 style="font-size:clamp(1.8rem,4vw,2.6rem);margin-top:12px;">Thoughts &amp; Perspectives</h1>
+          <p class="blog-intro">Insights on cyber resilience, data protection, disaster recovery, and enterprise cloud — from 20+ years in the field.</p>
+        </div>
+
+        <div class="tag-filter" id="tagFilter" role="toolbar" aria-label="Filter posts by topic"></div>
+        <div class="posts-grid" id="postsGrid" role="list"></div>
+        <div id="listingState" class="listing-state" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- POST VIEW -->
+    <div id="postView" class="post-view" style="display:none">
+      <div class="container post-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/blog/" class="breadcrumb-back" id="backToBlog">&#8592; All Posts</a>
+        </nav>
+
+        <header class="post-header">
+          <span class="insight-tag" id="postTag"></span>
+          <h1 class="post-title" id="postTitle"></h1>
+          <div class="post-meta">
+            <time id="postDate"></time>
+            <span class="meta-sep">&#183;</span>
+            <span id="postReadTime"></span>
+          </div>
+        </header>
+
+        <div id="postHeroImage" class="post-hero-image" style="display:none">
+          <img id="postHeroImg" src="" alt="" loading="lazy">
+        </div>
+
+        <article class="post-content" id="postContent" aria-label="Blog post content">
+          <div class="listing-state">Loading&#8230;</div>
+        </article>
+
+        <footer class="post-footer" id="postFooter" style="display:none">
+          <div class="post-nav" id="postNav"></div>
+          <div class="post-share">
+            <span class="share-label">Share:</span>
+            <a id="shareLinkedIn" href="#" target="_blank" rel="noopener noreferrer" class="share-btn">LinkedIn</a>
+            <a id="shareX" href="#" target="_blank" rel="noopener noreferrer" class="share-btn">X / Twitter</a>
+          </div>
+          <a href="/blog/" class="btn-back">&#8592; All Posts</a>
+        </footer>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Vishu Adapa &nbsp;&middot;&nbsp; <a href="mailto:vishuadapa@gmail.com">vishuadapa@gmail.com</a></p>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Scroll to top">&#8593;</button>
+
+  <!-- Local libraries (bundled for offline/dev use) -->
+  <script src="lib/marked.umd.js"></script>
+  <script src="lib/highlight.pack.js"></script>
+  <!-- Mermaid: CDN only (too large to bundle; diagrams gracefully degrade if unavailable) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+  <script>
+  // ============================================================
+  //  BLOG — inline application script
+  // ============================================================
+
+  const htmlEl = document.documentElement;
+  let manifest = [];
+  let _progressHandler = null;
+
+  // --- Dark mode ---
+  function applyTheme(theme) {
+    htmlEl.setAttribute('data-theme', theme);
+    document.getElementById('darkToggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', theme);
+    var l = document.getElementById('hljs-light');
+    var d = document.getElementById('hljs-dark');
+    if (l) l.disabled = (theme === 'dark');
+    if (d) d.disabled = (theme !== 'dark');
+    // Re-render mermaid if diagrams are visible
+    if (window.mermaid) {
+      var wrappers = document.querySelectorAll('.mermaid-wrapper');
+      if (wrappers.length) {
+        initMermaid(theme);
+        wrappers.forEach(function(w) {
+          var src = w.dataset.src;
+          if (src) {
+            w.removeAttribute('data-processed');
+            w.innerHTML = src;
+            window.mermaid.run({ nodes: [w] });
+          }
+        });
+      }
+    }
+  }
+
+  document.getElementById('darkToggle').addEventListener('click', function() {
+    applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  // Sync button state on load
+  applyTheme(htmlEl.getAttribute('data-theme') || 'light');
+
+  // --- Navbar ---
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+
+  // --- Mobile nav ---
+  var navToggle = document.getElementById('navToggle');
+  var navLinks  = document.getElementById('navLinks');
+  navToggle.addEventListener('click', function() { navLinks.classList.toggle('open'); });
+  navLinks.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() { navLinks.classList.remove('open'); });
+  });
+
+  // --- Back to top ---
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    backToTop.classList.toggle('visible', window.scrollY > 300);
+  }, { passive: true });
+  backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  // --- Disclaimer ---
+  (function() {
+    var banner = document.getElementById('disclaimerBanner');
+    var closeBtn = document.getElementById('disclaimerClose');
+    if (localStorage.getItem('blog-disclaimer-seen')) {
+      banner.style.display = 'none';
+    }
+    closeBtn.addEventListener('click', function() {
+      banner.style.display = 'none';
+      localStorage.setItem('blog-disclaimer-seen', '1');
+    });
+  })();
+
+  // --- Mermaid ---
+  function initMermaid(theme) {
+    if (!window.mermaid) return;
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: (theme || htmlEl.getAttribute('data-theme')) === 'dark' ? 'dark' : 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Inter, -apple-system, sans-serif',
+    });
+  }
+  initMermaid();
+
+  // --- marked.js config ---
+  if (window.marked) {
+    marked.setOptions({ gfm: true, breaks: false });
+  }
+
+  // --- Helpers ---
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    var parts = dateStr.split('-');
+    var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  function getAllTags() {
+    var seen = {};
+    var tags = [];
+    manifest.forEach(function(p) {
+      (p.tags || []).forEach(function(t) {
+        if (!seen[t]) { seen[t] = true; tags.push(t); }
+      });
+    });
+    return tags;
+  }
+
+  // --- Fade-in observer ---
+  var fadeIO = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); fadeIO.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+  // ── LISTING VIEW ──────────────────────────────────────────────
+
+  function renderTagFilter(activeTag) {
+    var container = document.getElementById('tagFilter');
+    var tags = getAllTags();
+    if (!tags.length) { container.innerHTML = ''; return; }
+    var html = '<button class="tag-btn' + (!activeTag ? ' active' : '') + '" data-tag="">All</button>';
+    tags.forEach(function(t) {
+      html += '<button class="tag-btn' + (activeTag === t ? ' active' : '') + '" data-tag="' + t + '">' + t + '</button>';
+    });
+    container.innerHTML = html;
+    container.querySelectorAll('.tag-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var tag = this.dataset.tag;
+        container.querySelectorAll('.tag-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        filterCards(tag);
+      });
+    });
+  }
+
+  function filterCards(tag) {
+    document.querySelectorAll('.post-card').forEach(function(card) {
+      var cardTags = card.dataset.tags ? card.dataset.tags.split('|') : [];
+      card.hidden = !!(tag && !cardTags.includes(tag));
+    });
+  }
+
+  function renderPostGrid() {
+    var grid = document.getElementById('postsGrid');
+    var state = document.getElementById('listingState');
+    if (!manifest.length) {
+      grid.innerHTML = '';
+      state.style.display = '';
+      state.innerHTML = '<p>No posts yet &mdash; check back soon.</p>';
+      return;
+    }
+    state.style.display = 'none';
+    grid.innerHTML = manifest.map(function(post) {
+      var tag = (post.tags && post.tags[0]) ? post.tags[0] : '';
+      var tagsAttr = post.tags ? post.tags.join('|') : '';
+      return '<a class="post-card fade-in" data-slug="' + post.slug + '" data-tags="' + tagsAttr + '" href="/blog/#' + post.slug + '" role="listitem">'
+        + '<div class="post-card-body">'
+        + (tag ? '<div class="post-card-tag"><span class="insight-tag">' + tag + '</span></div>' : '')
+        + '<div class="post-card-title">' + post.title + '</div>'
+        + '<div class="post-card-desc">' + post.description + '</div>'
+        + '<div class="post-card-footer">'
+        + '<span>' + formatDate(post.date) + '</span>'
+        + '<span class="meta-sep">&middot;</span>'
+        + '<span class="insight-read">' + (post.readTime || '') + '</span>'
+        + '<span class="insight-link">Read more &rarr;</span>'
+        + '</div>'
+        + '</div>'
+        + '</a>';
+    }).join('');
+
+    // Intercept clicks for client-side routing
+    grid.querySelectorAll('.post-card').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        var slug = this.dataset.slug;
+        history.pushState(null, '', '/blog/#' + slug);
+        showPost(slug);
+      });
+    });
+
+    // Fade-in
+    document.querySelectorAll('.post-card.fade-in').forEach(function(el) { fadeIO.observe(el); });
+  }
+
+  function showListing() {
+    document.getElementById('postView').style.display = 'none';
+    document.getElementById('listingView').style.display = '';
+    document.getElementById('readingProgress').style.display = 'none';
+    document.title = 'Blog | Vishu Adapa, CISSP';
+    updateOGTags({ title: 'Blog | Vishu Adapa, CISSP', description: 'Insights on cyber resilience, data protection, disaster recovery, and enterprise cloud from Vishu Adapa, CISSP.', slug: '' });
+
+    if (_progressHandler) {
+      window.removeEventListener('scroll', _progressHandler, { passive: true });
+      _progressHandler = null;
+    }
+    renderTagFilter('');
+    renderPostGrid();
+    window.scrollTo(0, 0);
+  }
+
+  // ── POST VIEW ─────────────────────────────────────────────────
+
+  function showPost(slug) {
+    var post = manifest.find(function(p) { return p.slug === slug; });
+    if (!post) { showListing(); return; }
+
+    document.getElementById('listingView').style.display = 'none';
+    document.getElementById('postView').style.display = '';
+    document.getElementById('readingProgress').style.display = '';
+    document.getElementById('postFooter').style.display = 'none';
+
+    document.getElementById('postTag').textContent = (post.tags && post.tags[0]) ? post.tags[0] : '';
+    document.getElementById('postTitle').textContent = post.title;
+    document.getElementById('postDate').textContent = formatDate(post.date);
+    document.getElementById('postReadTime').textContent = post.readTime || '';
+    document.title = post.title + ' | Vishu Adapa, CISSP';
+    updateOGTags(post);
+
+    var hero = document.getElementById('postHeroImage');
+    if (post.image) {
+      document.getElementById('postHeroImg').src = '/blog/images/' + post.image;
+      document.getElementById('postHeroImg').alt = post.title;
+      hero.style.display = '';
+    } else {
+      hero.style.display = 'none';
+    }
+
+    document.getElementById('postContent').innerHTML = '<div class="listing-state">Loading&#8230;</div>';
+
+    fetch('posts/' + slug + '.md')
+      .then(function(res) {
+        if (!res.ok) throw new Error('not found');
+        return res.text();
+      })
+      .then(function(md) {
+        // Strip leading HTML comment (author metadata block)
+        md = md.replace(/^\s*<!--[\s\S]*?-->\s*/, '');
+        // Strip leading H1 (already displayed in post header from manifest)
+        md = md.replace(/^#[^#][^\n]*\n/, '');
+        var html = window.marked ? marked.parse(md) : ('<pre>' + md + '</pre>');
+        var contentEl = document.getElementById('postContent');
+        contentEl.innerHTML = html;
+        postProcess(contentEl);
+        document.getElementById('postFooter').style.display = '';
+        renderPostNav(slug);
+        updateShareLinks(post);
+        initReadingProgress();
+      })
+      .catch(function() {
+        document.getElementById('postContent').innerHTML =
+          '<div class="listing-state"><p>This post could not be loaded.</p>'
+          + '<p style="margin-top:16px"><a href="/blog/" class="breadcrumb-back">&larr; Back to Blog</a></p></div>';
+      });
+
+    window.scrollTo(0, 0);
+  }
+
+  function postProcess(contentEl) {
+    // 1. Mermaid: find <code class="language-mermaid">, replace <pre> with wrapper div
+    var mermaidNodes = [];
+    contentEl.querySelectorAll('pre code.language-mermaid').forEach(function(code) {
+      var pre = code.parentElement;
+      var src = code.textContent;
+      var wrapper = document.createElement('div');
+      wrapper.className = 'mermaid-wrapper';
+      wrapper.dataset.src = src;
+      wrapper.textContent = src;
+      pre.replaceWith(wrapper);
+      mermaidNodes.push(wrapper);
+    });
+    if (mermaidNodes.length && window.mermaid) {
+      mermaid.run({ nodes: mermaidNodes });
+    }
+
+    // 2. Syntax-highlight remaining code blocks + add copy buttons
+    contentEl.querySelectorAll('pre code').forEach(function(block) {
+      if (window.hljs) hljs.highlightElement(block);
+      var pre = block.parentElement;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function() {
+        var text = block.textContent.trim();
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+          });
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta);
+          ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+          btn.textContent = 'Copied!';
+          setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+
+    // 3. External links open in new tab
+    contentEl.querySelectorAll('a').forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.startsWith('http://') || href.startsWith('https://')) {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+
+    // 4. Lazy-load images
+    contentEl.querySelectorAll('img').forEach(function(img) {
+      img.setAttribute('loading', 'lazy');
+      if (!img.getAttribute('alt')) img.setAttribute('alt', '');
+    });
+  }
+
+  function renderPostNav(currentSlug) {
+    var posts = manifest;
+    var idx = posts.findIndex(function(p) { return p.slug === currentSlug; });
+    var newer = idx > 0 ? posts[idx - 1] : null;
+    var older = idx < posts.length - 1 ? posts[idx + 1] : null;
+    var navEl = document.getElementById('postNav');
+
+    function makeNavLink(post, direction, label) {
+      var a = document.createElement('a');
+      a.className = 'post-nav-link post-nav-' + direction;
+      a.href = '/blog/#' + post.slug;
+      a.dataset.slug = post.slug;
+      a.innerHTML = '<span class="nav-direction">' + label + '</span><span class="nav-title">' + post.title + '</span>';
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        history.pushState(null, '', '/blog/#' + post.slug);
+        showPost(post.slug);
+      });
+      return a;
+    }
+
+    navEl.innerHTML = '';
+    if (older) navEl.appendChild(makeNavLink(older, 'prev', '&#8592; Older'));
+    else navEl.appendChild(document.createElement('span'));
+    if (newer) navEl.appendChild(makeNavLink(newer, 'next', 'Newer &#8594;'));
+    else navEl.appendChild(document.createElement('span'));
+  }
+
+  function initReadingProgress() {
+    if (_progressHandler) {
+      window.removeEventListener('scroll', _progressHandler, { passive: true });
+    }
+    var bar = document.getElementById('readingProgressBar');
+    var article = document.getElementById('postContent');
+    _progressHandler = function() {
+      var rect = article.getBoundingClientRect();
+      var total = rect.height - window.innerHeight;
+      var scrolled = Math.max(0, -rect.top);
+      var pct = total > 0 ? Math.min(100, (scrolled / total) * 100) : 0;
+      bar.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', _progressHandler, { passive: true });
+  }
+
+  function updateOGTags(post) {
+    function setMeta(prop, val) {
+      var el = document.querySelector('meta[property="' + prop + '"]');
+      if (!el) { el = document.createElement('meta'); el.setAttribute('property', prop); document.head.appendChild(el); }
+      el.setAttribute('content', val || '');
+    }
+    setMeta('og:title', (post.title || 'Blog') + ' | Vishu Adapa, CISSP');
+    setMeta('og:description', post.description || '');
+    setMeta('og:url', 'https://vishuadapa.com/blog/' + (post.slug ? '#' + post.slug : ''));
+  }
+
+  function updateShareLinks(post) {
+    var url = 'https://vishuadapa.com/blog/#' + post.slug;
+    var title = encodeURIComponent(post.title);
+    document.getElementById('shareLinkedIn').href =
+      'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+    document.getElementById('shareX').href =
+      'https://x.com/intent/tweet?url=' + encodeURIComponent(url) + '&text=' + title;
+  }
+
+  // ── ROUTER ───────────────────────────────────────────────────
+
+  function route() {
+    var slug = window.location.hash.slice(1);
+    if (slug) {
+      showPost(slug);
+    } else {
+      showListing();
+    }
+  }
+
+  window.addEventListener('popstate', route);
+
+  // Intercept the "Back to Blog" breadcrumb link for SPA navigation
+  document.getElementById('backToBlog').addEventListener('click', function(e) {
+    e.preventDefault();
+    history.pushState(null, '', '/blog/');
+    showListing();
+  });
+
+  // ── BOOTSTRAP ────────────────────────────────────────────────
+
+  fetch('manifest.json')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      manifest = Array.isArray(data) ? data : (data.posts || []);
+      route();
+    })
+    .catch(function() {
+      var state = document.getElementById('listingState');
+      state.style.display = '';
+      state.innerHTML = '<p>Posts could not be loaded. Please try refreshing.</p>';
+      document.getElementById('postsGrid').innerHTML = '';
+    });
+
+  </script>
+</body>
+</html>
