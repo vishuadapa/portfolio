@@ -1,5 +1,14 @@
 [
   {
+    "slug": "cohesity-mcp-ai-integration",
+    "title": "AI Meets Data Protection: What I Built and What It Unlocks",
+    "date": "2026-07-24",
+    "tags": ["MCP", "AI", "Cohesity", "Automation", "Data Protection"],
+    "description": "I built a Model Context Protocol server that lets Claude talk directly to a Cohesity cluster. Here's the architecture, the safety layer, the real capabilities, and where this goes next.",
+    "readTime": "12 min read",
+    "image": ""
+  },
+  {
     "slug": "ransomware-beyond-backups",
     "title": "Why Ransomware Recovery Requires More Than Just Backups",
     "date": "2026-07-09",
