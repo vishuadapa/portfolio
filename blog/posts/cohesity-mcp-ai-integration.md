@@ -4,17 +4,17 @@
 
 ---
 
-There is a category of problem in enterprise IT that I think of as the **runbook treadmill**: tasks that are important enough to have a documented procedure, repetitive enough that operators resent doing them, and subtle enough that a distracted operator can still make a costly mistake. Health checks, alert triage, failed-backup remediation, DR test prep — data protection operations are full of them.
+There is a category of problem in enterprise IT that I think of as the **runbook treadmill**: tasks that are important enough to have a documented procedure, repetitive enough that operators resent doing them, and subtle enough that a distracted operator can still make a costly mistake. Health checks, alert triage, failed-backup remediation, DR test prep - data protection operations are full of them.
 
 I built a Model Context Protocol (MCP) server that connects Claude directly to a Cohesity cluster. The goal was to see whether an AI assistant could handle the runbook treadmill while keeping a human in the decision loop for anything consequential. This post walks through the design, the safety architecture, the real capabilities it unlocks today, and where I think this goes.
 
-> The complete source is at [github.com/vishuadapa/cohesity-automation](https://github.com/vishuadapa/cohesity-automation). This is a personal SE demo tool — not an official Cohesity product.
+> The complete source is at [github.com/vishuadapa/cohesity-automation](https://github.com/vishuadapa/cohesity-automation). This is a personal SE demo tool - not an official Cohesity product.
 
 ---
 
 ## What is MCP?
 
-[Model Context Protocol](https://modelcontextprotocol.io/) is an open standard (published by Anthropic in 2024) for connecting AI assistants to external tools and data sources. Think of it as a standardized plugin interface: you define Python functions decorated with `@mcp.tool()`, and the AI assistant discovers and calls them just like calling any other function — except the function is expressed in natural language by the user.
+[Model Context Protocol](https://modelcontextprotocol.io/) is an open standard (published by Anthropic in 2024) for connecting AI assistants to external tools and data sources. Think of it as a standardized plugin interface: you define Python functions decorated with `@mcp.tool()`, and the AI assistant discovers and calls them just like calling any other function - except the function is expressed in natural language by the user.
 
 The minimal setup looks like this:
 
@@ -30,11 +30,11 @@ def get_cluster_health() -> dict:
     return { "name": ..., "healthy": ..., "nodeCount": ... }
 ```
 
-When you wire this to Claude Desktop, asking *"Is my cluster healthy?"* causes Claude to call `get_cluster_health()`, read the structured response, and answer in plain English — including flagging stopped services, sync issues, or healing states without the operator needing to know which API endpoint or field to look at.
+When you wire this to Claude Desktop, asking *"Is my cluster healthy?"* causes Claude to call `get_cluster_health()`, read the structured response, and answer in plain English - including flagging stopped services, sync issues, or healing states without the operator needing to know which API endpoint or field to look at.
 
 The server supports two transports:
-- **stdio** (default) — for Claude Desktop on your laptop
-- **Streamable HTTP** — for VS Code Copilot, web integrations, or any MCP-compatible client
+- **stdio** (default) - for Claude Desktop on your laptop
+- **Streamable HTTP** - for VS Code Copilot, web integrations, or any MCP-compatible client
 
 ```bash
 # Claude Desktop (stdio)
@@ -55,11 +55,11 @@ flowchart TD
     User([Operator]):::actor -->|natural language| Claude([Claude AI]):::ai
     Claude -->|tool call| MCP[Cohesity MCP Server]:::mcp
 
-    MCP --> T1["Tier 1 — Monitor\nget_cluster_health\nget_alerts\nget_storage_stats"]:::safe
-    MCP --> T2["Tier 2 — Report\nget_protection_groups\nget_protection_runs\nget_recovery_points\nhealthcheck_summary"]:::safe
-    MCP --> T25["Tier 2.5 — Discover\nsearch_cluster_api\nget_whoami\nsearch_community_scripts"]:::safe
-    MCP --> T3["Tier 3 — Act\npause_protection_group\nresume_protection_group\nretry_failed_run\nacknowledge_alert\ninstant_access_vm"]:::caution
-    MCP --> T4["Tier 4 — Generic\ncall_api"]:::caution
+    MCP --> T1["Tier 1 - Monitor\nget_cluster_health\nget_alerts\nget_storage_stats"]:::safe
+    MCP --> T2["Tier 2 - Report\nget_protection_groups\nget_protection_runs\nget_recovery_points\nhealthcheck_summary"]:::safe
+    MCP --> T25["Tier 2.5 - Discover\nsearch_cluster_api\nget_whoami\nsearch_community_scripts"]:::safe
+    MCP --> T3["Tier 3 - Act\npause_protection_group\nresume_protection_group\nretry_failed_run\nacknowledge_alert\ninstant_access_vm"]:::caution
+    MCP --> T4["Tier 4 - Generic\ncall_api"]:::caution
 
     T3 -->|RBAC gate + confirm pattern| Cluster[("Cohesity Cluster\nREST API v1 / v2")]:::infra
     T4 -->|RBAC gate + risk classify| Cluster
@@ -73,15 +73,15 @@ flowchart TD
     classDef infra fill:#1f1235,color:#c4b5fd,stroke:#7c3aed
 ```
 
-**Tier 1 (Monitor)** — Pure reads. These are safe to call any time, and they form the foundation of every interactive session. `get_cluster_health` hits two endpoints simultaneously and synthesizes a single healthy/unhealthy signal with stopped services surfaced. `get_alerts` filters by severity. `get_storage_stats` returns capacity, usage, and data-reduction ratios.
+**Tier 1 (Monitor)** - Pure reads. These are safe to call any time, and they form the foundation of every interactive session. `get_cluster_health` hits two endpoints simultaneously and synthesizes a single healthy/unhealthy signal with stopped services surfaced. `get_alerts` filters by severity. `get_storage_stats` returns capacity, usage, and data-reduction ratios.
 
-**Tier 2 (Report)** — Still read-only, but at the protection-group layer. `get_protection_groups` returns the last-run status of every group. `get_protection_runs` gives run history for a specific group with optional failure-only filtering. `get_recovery_points` lets you ask *"what snapshots do I have for vm-prod-01?"* and get back timestamped, named results. `healthcheck_summary` combines health + critical alerts + failed groups into one call.
+**Tier 2 (Report)** - Still read-only, but at the protection-group layer. `get_protection_groups` returns the last-run status of every group. `get_protection_runs` gives run history for a specific group with optional failure-only filtering. `get_recovery_points` lets you ask *"what snapshots do I have for vm-prod-01?"* and get back timestamped, named results. `healthcheck_summary` combines health + critical alerts + failed groups into one call.
 
-**Tier 2.5 (Discover)** — This is where it gets interesting. Three tools that help the AI understand what it can do before doing it: `get_whoami` (current user identity, Cohesity roles, effective risk ceiling), `search_cluster_api` (live Swagger search), and `search_community_scripts` (AI-powered community script lookup — more on this below).
+**Tier 2.5 (Discover)** - This is where it gets interesting. Three tools that help the AI understand what it can do before doing it: `get_whoami` (current user identity, Cohesity roles, effective risk ceiling), `search_cluster_api` (live Swagger search), and `search_community_scripts` (AI-powered community script lookup - more on this below).
 
-**Tier 3 (Act)** — Mutating operations, all using the confirm pattern (more on this shortly). Pause/resume protection groups, trigger on-demand runs, acknowledge alerts, and Instant Access VM recovery.
+**Tier 3 (Act)** - Mutating operations, all using the confirm pattern (more on this shortly). Pause/resume protection groups, trigger on-demand runs, acknowledge alerts, and Instant Access VM recovery.
 
-**Tier 4 (Generic)** — The escape hatch: `call_api` lets Claude call any Cohesity endpoint by HTTP method and path, gated by RBAC classification.
+**Tier 4 (Generic)** - The escape hatch: `call_api` lets Claude call any Cohesity endpoint by HTTP method and path, gated by RBAC classification.
 
 ---
 
@@ -94,7 +94,7 @@ This is the part I'm most proud of, because it's the part that makes the tool ac
 Every operation gets classified into one of five risk levels:
 
 ```python
-_RISK_READ        = 0   # GET — safe, no side effects
+_RISK_READ        = 0   # GET - safe, no side effects
 _RISK_REVERSIBLE  = 1   # POST/PUT that can be undone (pause, resume, trigger run)
 _RISK_CAUTION     = 2   # POST/PUT with lasting side-effects (create, modify config)
 _RISK_DESTRUCTIVE = 3   # DELETE, or operations that permanently alter data
@@ -110,7 +110,7 @@ _ALWAYS_BLOCKED_SUBSTRINGS = [
 ]
 ```
 
-If the API path contains any of these strings, the tool refuses — full stop, no RBAC check, no confirm prompt. The AI cannot talk its way past this.
+If the API path contains any of these strings, the tool refuses - full stop, no RBAC check, no confirm prompt. The AI cannot talk its way past this.
 
 Classification is path-based for the generic executor:
 
@@ -152,7 +152,7 @@ Elevate your Cohesity role or ask an admin to perform this action.
 
 ### The Confirm Pattern
 
-Every mutating Tier 3 tool requires two calls to execute. The first call (confirm=False) returns a structured proposal; the second call (confirm=True) executes. This is not a UI affordance — it is enforced in code:
+Every mutating Tier 3 tool requires two calls to execute. The first call (confirm=False) returns a structured proposal; the second call (confirm=True) executes. This is not a UI affordance - it is enforced in code:
 
 ```python
 @mcp.tool()
@@ -183,9 +183,9 @@ Here are a few interactions that showcase what this enables today.
 
 > **Operator**: "What's the state of my cluster?"
 
-Claude calls `healthcheck_summary()` — which internally calls `get_cluster_health`, `get_alerts(severity="kCritical")`, and `get_protection_groups` in sequence — and responds:
+Claude calls `healthcheck_summary()` - which internally calls `get_cluster_health`, `get_alerts(severity="kCritical")`, and `get_protection_groups` in sequence - and responds:
 
-> *"Your cluster is running Cohesity 7.1.2 with 6 nodes. There are 3 open critical alerts — two disk-health warnings on node 4 and one replication lag alert. Across your 23 protection groups, the SQL Production and VMware NAS groups both failed their last run. Want me to pull the failure details for those two groups?"*
+> *"Your cluster is running Cohesity 7.1.2 with 6 nodes. There are 3 open critical alerts - two disk-health warnings on node 4 and one replication lag alert. Across your 23 protection groups, the SQL Production and VMware NAS groups both failed their last run. Want me to pull the failure details for those two groups?"*
 
 Three API calls, synthesized into one actionable answer. The operator didn't need to know which endpoints to check or how to interpret `bulletinState.stoppedServices`.
 
@@ -217,7 +217,7 @@ Claude calls `get_recovery_points("vm-prod-crm")`, returns a timestamped list of
 
 ## Dynamic API Discovery: The Escape Hatch
 
-Not every operation has a dedicated tool. That's where `search_cluster_api` and `call_api` come in — they make the MCP server extensible without requiring code changes.
+Not every operation has a dedicated tool. That's where `search_cluster_api` and `call_api` come in - they make the MCP server extensible without requiring code changes.
 
 ### Finding Endpoints at Runtime
 
@@ -239,7 +239,7 @@ Claude calls `search_cluster_api("storage domain")` and gets back:
 ]
 ```
 
-It then calls `call_api("GET", "/v2/storage-domains", confirm=False)` to propose the call, and `confirm=True` to execute — all within the same conversation.
+It then calls `call_api("GET", "/v2/storage-domains", confirm=False)` to propose the call, and `confirm=True` to execute - all within the same conversation.
 
 This is important: the AI is using the cluster's own API documentation, live, to discover capabilities. It's not working from a hardcoded list.
 
@@ -256,7 +256,7 @@ def search_community_scripts(query: str, max_results: int = 3) -> list[dict]:
 
 > **Operator**: "I need to expire old snapshots manually. Is there a script for that?"
 
-Claude searches the community repo, finds `expireSnapshots.py`, and extracts the API call pattern. It then proposes executing it via `call_api` — all without the operator needing to read a Python script or know which endpoint handles snapshot expiry.
+Claude searches the community repo, finds `expireSnapshots.py`, and extracts the API call pattern. It then proposes executing it via `call_api` - all without the operator needing to read a Python script or know which endpoint handles snapshot expiry.
 
 When `ANTHROPIC_API_KEY` is set, Claude itself does the extraction using its code-reading capabilities, producing a structured `body_template` with the required inputs identified. Without an API key, a regex fallback extracts the raw `api()` call signatures from the pyhesity helper pattern.
 
@@ -264,7 +264,7 @@ When `ANTHROPIC_API_KEY` is set, Claude itself does the extraction using its cod
 
 ## Instant Access: AI-Driven Recovery Testing
 
-The `instant_access_vm` tool implements the Cohesity Instant Access pattern — booting a VM directly from a backup snapshot without restoring it to primary storage first. It handles the full workflow: search for the protected object, find the latest local snapshot, build the v2 recovery API body, handle vCenter targeting, and enforce the confirm pattern.
+The `instant_access_vm` tool implements the Cohesity Instant Access pattern - booting a VM directly from a backup snapshot without restoring it to primary storage first. It handles the full workflow: search for the protected object, find the latest local snapshot, build the v2 recovery API body, handle vCenter targeting, and enforce the confirm pattern.
 
 ```python
 @mcp.tool()
@@ -273,7 +273,7 @@ def instant_access_vm(
     prefix:           str  = "",
     suffix:           str  = "",
     power_on:         bool = True,
-    detach_network:   bool = True,  # recommended for DR/test — avoids IP conflicts
+    detach_network:   bool = True,  # recommended for DR/test - avoids IP conflicts
     target_source_id: int  = 0,     # 0 = recover to original vCenter
     confirm:          bool = False,
 ) -> dict:
@@ -281,7 +281,7 @@ def instant_access_vm(
 
 > **Operator**: "Spin up vm-prod-crm from its latest backup as a test clone. Prefix it with 'vishu-' and keep it network-isolated."
 
-Claude calls `instant_access_vm("vm-prod-crm", prefix="vishu-", detach_network=True, confirm=False)`, presents the proposal including the snapshot timestamp and protection group, and waits for confirmation. After `confirm=True`, the VM boots from Cohesity storage within minutes — no waiting for a full restore.
+Claude calls `instant_access_vm("vm-prod-crm", prefix="vishu-", detach_network=True, confirm=False)`, presents the proposal including the snapshot timestamp and protection group, and waits for confirmation. After `confirm=True`, the VM boots from Cohesity storage within minutes - no waiting for a full restore.
 
 The `detach_network=True` default matters: recovering to the same vCenter with the same IP as the source VM would cause a network conflict. The tool defaults to network isolation for exactly this reason, and explains it in the proposal.
 
@@ -301,7 +301,7 @@ An MCP-connected agent running on a schedule can:
 5. For transient failures: propose `retry_failed_run` and wait for operator approval via a notification
 6. For persistent failures: escalate with a structured incident summary
 
-This is qualitatively different from a static alert rule. The agent reads context — the error message, the failure history, the object count — and produces a *diagnosis*, not just a notification.
+This is qualitatively different from a static alert rule. The agent reads context - the error message, the failure history, the object count - and produces a *diagnosis*, not just a notification.
 
 ### Natural Language DR Drills
 
@@ -309,7 +309,7 @@ Today, running a DR drill requires an operator to: find the right VM, locate a c
 
 > "Start a DR drill for the CRM tier. Use the last clean snapshot. Isolate networking. Report back when the VMs are up."
 
-The agent handles snapshot selection, Instant Access for each VM in the tier, network isolation, and status polling — with human approval at the launch step. The operator reviews a readout, not a runbook.
+The agent handles snapshot selection, Instant Access for each VM in the tier, network isolation, and status polling - with human approval at the launch step. The operator reviews a readout, not a runbook.
 
 ### Ransomware Response Automation
 
@@ -385,13 +385,13 @@ Then add `http://localhost:8720` as an MCP endpoint in your client.
 
 A few things that surprised me building this:
 
-**The confirm pattern is underrated.** I initially thought two-call execution would feel clunky. In practice, it feels *right* — the proposal step forces the AI to articulate what it's about to do, which surfaces misunderstandings before they become incidents.
+**The confirm pattern is underrated.** I initially thought two-call execution would feel clunky. In practice, it feels *right* - the proposal step forces the AI to articulate what it's about to do, which surfaces misunderstandings before they become incidents.
 
 **RBAC gating belongs in the tool, not just in the prompt.** You can instruct an LLM to "only perform actions the user is authorized for," but that's a soft constraint. Fetching roles at runtime and refusing at the code level is a hard constraint. The difference matters.
 
-**Dynamic discovery changes the capability ceiling.** A static list of tools limits what the AI can do to what you anticipated when you wrote the code. Adding `search_cluster_api` and `search_community_scripts` turns the AI into something that can reason about the full API surface — and find its own way to accomplish tasks you didn't explicitly build for.
+**Dynamic discovery changes the capability ceiling.** A static list of tools limits what the AI can do to what you anticipated when you wrote the code. Adding `search_cluster_api` and `search_community_scripts` turns the AI into something that can reason about the full API surface - and find its own way to accomplish tasks you didn't explicitly build for.
 
-**Instant Access is underutilized.** Most customers use it for full disaster recovery testing. But as a lightweight DR *drill* mechanism — mount a VM for 30 minutes, verify application health, tear it down — it's remarkably powerful and fast. Pairing it with an AI agent that can select the right snapshot and manage the lifecycle makes it accessible without deep Cohesity expertise.
+**Instant Access is underutilized.** Most customers use it for full disaster recovery testing. But as a lightweight DR *drill* mechanism - mount a VM for 30 minutes, verify application health, tear it down - it's remarkably powerful and fast. Pairing it with an AI agent that can select the right snapshot and manage the lifecycle makes it accessible without deep Cohesity expertise.
 
 The MCP server is about 650 lines of Python. The real work was in the design decisions: where to draw the tier boundaries, how aggressive to make the block list, what the confirm pattern should say. Those choices determine whether operators trust the tool enough to use it in production.
 
