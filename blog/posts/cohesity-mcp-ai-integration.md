@@ -8,7 +8,7 @@ There is a category of problem in enterprise IT that I think of as the **runbook
 
 I built a Model Context Protocol (MCP) server that connects Claude directly to a Cohesity cluster. The goal was to see whether an AI assistant could handle the runbook treadmill while keeping a human in the decision loop for anything consequential. This post walks through the design, the safety architecture, the real capabilities it unlocks today, and where I think this goes.
 
-> The complete source is at [github.com/vishuadapa/cohesity-automation](https://github.com/vishuadapa/cohesity-automation). This is a personal SE demo tool — not an official Cohesity product.
+> The complete source is at [github.com/vishuadapa/cohesity-automation](https://github.com/vishuadapa/cohesity-automation) (MCP server in the `mcp/` folder). This is a personal SE demo tool — not an official Cohesity product.
 
 ---
 
@@ -38,10 +38,10 @@ The server supports two transports:
 
 ```bash
 # Claude Desktop (stdio)
-python cohesity_mcp_v2.py
+python mcp/cohesity_mcp_v2.py
 
 # VS Code / HTTP client
-MCP_TRANSPORT=http python cohesity_mcp_v2.py
+MCP_TRANSPORT=http python mcp/cohesity_mcp_v2.py
 ```
 
 ---
@@ -359,7 +359,7 @@ export COHESITY_API_KEY=your-api-key-here
   "mcpServers": {
     "cohesity": {
       "command": "python",
-      "args": ["/path/to/cohesity-automation/cohesity_mcp_v2.py"],
+      "args": ["/path/to/cohesity-automation/mcp/cohesity_mcp_v2.py"],
       "env": {
         "COHESITY_CLUSTER": "mycluster.lab.local",
         "COHESITY_API_KEY": "your-api-key-here"
@@ -374,7 +374,7 @@ Restart Claude Desktop, and you'll see the Cohesity tools appear in the tool lis
 For VS Code / Copilot:
 
 ```bash
-MCP_TRANSPORT=http MCP_HTTP_PORT=8720 python cohesity_mcp_v2.py
+MCP_TRANSPORT=http MCP_HTTP_PORT=8720 python mcp/cohesity_mcp_v2.py
 ```
 
 Then add `http://localhost:8720` as an MCP endpoint in your client.
