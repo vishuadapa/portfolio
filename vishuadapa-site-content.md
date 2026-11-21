@@ -17,7 +17,7 @@ I design recovery strategies I’d actually be willing to operate.
 
 ## ABOUT
 
-Twenty-some years in enterprise IT taught me one thing above everything else. Tech problems are rarely about tech. They’re about risk, money, and people, and if you don’t solve for all three you haven’t really solved anything.
+Twenty-two years in enterprise IT taught me one thing above everything else. Tech problems are rarely about tech. They’re about risk, money, and people, and if you don’t solve for all three you haven’t really solved anything.
 
 I’ve held just about every seat at the table. I started in support, taking the calls when things broke at 2 AM. Then I ran the infrastructure myself: storage, SAN fabrics, large VMware environments, backup at multi-petabyte scale. I lived with the consequences of every architecture decision I made, through migrations and data center consolidations that didn’t have the luxury of going wrong. From there I moved into professional services at Dell EMC, implementing what others had sold. Then into architecture and presales, designing it.
 

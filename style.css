@@ -894,3 +894,5 @@ a.cert-card {
 
 /* Sub-sections inside Credentials (Awards, Education) */
 .subsection-header { margin-top: 64px; }
+.volunteer-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 768px) { .volunteer-grid { grid-template-columns: 1fr; } }
