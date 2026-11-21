@@ -891,3 +891,6 @@ a.cert-card {
   }
   .cissp-shield { animation: none; }
 }
+
+/* Sub-sections inside Credentials (Awards, Education) */
+.subsection-header { margin-top: 64px; }
